@@ -79,7 +79,7 @@
 <div class="mx-auto max-w-[1200px] px-6">
 	<header class="flex flex-wrap items-baseline justify-between gap-2 pt-12 pb-6">
 		<div>
-			<h1 class="text-2xl font-semibold tracking-tight text-[var(--text)]">notalex.sh OSINT Utility Stack</h1>
+			<h1 class="text-2xl font-semibold tracking-tight text-[var(--text)]">notalex.sh OSINT Toolkit</h1>
 			<p class="mt-1 text-xs text-[var(--text-tertiary)]">
 				by <a href="https://notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">notalex.sh</a>
 				&middot;
