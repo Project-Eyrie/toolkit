@@ -1,13 +1,6 @@
-// See https://svelte.dev/docs/kit/types#app.d.ts
-// for information about these interfaces
+// SvelteKit ambient type declarations for the app namespace
 declare global {
-	namespace App {
-		// interface Error {}
-		// interface Locals {}
-		// interface PageData {}
-		// interface PageState {}
-		// interface Platform {}
-	}
+	namespace App {}
 }
 
 export {};

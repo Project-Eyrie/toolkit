@@ -1,3 +1,4 @@
+<!-- Root layout that sets the favicon for all pages -->
 <script lang="ts">
 	import favicon from '$lib/assets/favicon.svg';
 

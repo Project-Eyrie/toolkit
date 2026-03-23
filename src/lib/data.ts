@@ -70,7 +70,9 @@ export const bookmarks: Category[] = [
 			{ name: 'OpenSeaMap', desc: 'Nautical charts', url: 'https://map.openseamap.org/' },
 			{ name: 'Wayback Imagery', desc: 'Historical satellite images', url: 'http://livingatlas.arcgis.com/wayback/' },
 			{ name: 'Shadow Finder', desc: 'Shadow-based time analysis', url: 'https://colab.research.google.com/github/Bellingcat/ShadowFinder/blob/main/ShadowFinderColab.ipynb' },
-			{ name: 'Coordinate Converter', desc: 'Geographic unit converter', url: 'https://rcn.montana.edu/resources/Converter.aspx' }
+			{ name: 'Coordinate Converter', desc: 'Geographic unit converter', url: 'https://rcn.montana.edu/resources/Converter.aspx' },
+			{ name: 'MapDevelopers', desc: 'Draw circle tool on map', url: 'https://www.mapdevelopers.com/draw-circle-tool.php' },
+			{ name: 'ShadeMap', desc: 'Shadow-based time estimation', url: 'https://shademap.app/' }
 		]
 	},
 	{

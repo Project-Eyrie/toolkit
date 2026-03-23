@@ -73,10 +73,59 @@ The page loads all 186+ bookmarks organised into 16 categories. Use the search b
 | Utilities & Tools | 11 |
 | OSINT Resources & Guides | 8 |
 
+---
+
+## Development
+
+### Prerequisites
+
+- Node.js >= 18
+
+### Setup
+
+```bash
+git clone https://github.com/Project-Eyrie/toolkit.git
+cd toolkit
+npm install
+```
+
+### Dev Server
+
+```bash
+npm run dev
+```
+
+### Production Build
+
+```bash
+npm run build
+```
+
+### Deploy
+
+The project uses `@sveltejs/adapter-vercel`. Push to the connected Vercel project and it deploys automatically.
+
+---
+
+## Project Structure
+
+```
+src/
+  lib/
+    data.ts           # Bookmark types, data array, and utility functions
+  routes/
+    +layout.svelte    # Favicon setup
+    +page.svelte      # Main page component
+  app.css             # Tailwind directives, font import, CSS variables
+```
+
+---
+
 ## Notes
 
 - **Static site** - no backend, no database, all data is embedded in the build
 - **Favicons** - loaded from Google's favicon service; falls back to initials on failure
+- **Adding tools** - edit `src/lib/data.ts` and add entries to the appropriate category
 - **Build your own** - use [Marksmith](https://marksmith.notalex.sh) to create your own bookmark stack
 
 ---

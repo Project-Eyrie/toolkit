@@ -79,7 +79,7 @@
 <div class="mx-auto max-w-[1200px] px-6">
 	<header class="flex flex-wrap items-baseline justify-between gap-2 pt-12 pb-6">
 		<div>
-			<h1 class="text-2xl font-semibold tracking-tight text-[var(--text)]">notalex.sh OSINT Toolkit</h1>
+			<h1 class="text-2xl font-semibold tracking-tight text-[var(--text)]">notalex.sh OSINT Utility Stack</h1>
 			<p class="mt-1 text-xs text-[var(--text-tertiary)]">
 				by <a href="https://notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">notalex.sh</a>
 				&middot;
@@ -184,6 +184,7 @@
 {/if}
 
 {#snippet tile(link: Link)}
+	{@const faviconUrl = getFavicon(link.url)}
 	<a
 		href={link.url}
 		target="_blank"
@@ -191,8 +192,8 @@
 		class="group relative flex items-center gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface)] px-4 py-3.5 no-underline transition-all hover:border-[var(--border-hover)] hover:bg-[var(--surface-hover)] hover:shadow-sm"
 	>
 		<div class="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-[var(--tag-bg)] max-sm:hidden">
-			{#if getFavicon(link.url)}
-				<img src={getFavicon(link.url)} alt="" loading="lazy" class="h-[18px] w-[18px] object-contain" onerror={(e: Event) => { const el = e.target as HTMLImageElement; el.style.display = 'none'; el.nextElementSibling?.classList.remove('hidden'); }} />
+			{#if faviconUrl}
+				<img src={faviconUrl} alt="" loading="lazy" class="h-[18px] w-[18px] object-contain" onerror={(e: Event) => { const el = e.target as HTMLImageElement; el.style.display = 'none'; el.nextElementSibling?.classList.remove('hidden'); }} />
 				<span class="hidden font-mono text-[0.7rem] font-semibold text-[var(--text-tertiary)] uppercase">{getInitials(link.name)}</span>
 			{:else}
 				<span class="font-mono text-[0.7rem] font-semibold text-[var(--text-tertiary)] uppercase">{getInitials(link.name)}</span>
