@@ -1,8 +1,10 @@
 <div align="center">
 
+<img src="logo.png" alt="OSINT Toolkit" width="80" />
+
 # OSINT Toolkit
 
-> A curated, searchable collection of 186+ OSINT tools and resources, organised by category with instant filtering.
+> A curated, searchable collection of 190+ OSINT tools and resources, organised by category with instant filtering and an interactive graph view.
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 [![In Project Eyrie](https://img.shields.io/badge/IN-PROJECT%20EYRIE-b45309?style=for-the-badge&labelColor=0f172a)](https://github.com/Project-Eyrie)
@@ -14,18 +16,20 @@
 
 ## Overview
 
-**OSINT Utility Stack** is a web-based bookmark directory built for investigators, analysts, and researchers. It presents a large collection of OSINT tools in a fast, filterable interface so you can find what you need without scrolling through browser bookmark folders.
+**OSINT Toolkit** is a web-based bookmark directory built for investigators, analysts, and researchers. It presents a large collection of OSINT tools in a fast, filterable interface so you can find what you need without scrolling through browser bookmark folders. All bookmarks are stored in a single Netscape HTML file (`toolkit.html`) for easy maintenance and browser import.
 
 ---
 
 ## Features
 
-- **186+ curated tools** - covering search engines, image analysis, geolocation, social media, domain intel, and more
-- **Instant search** - filter across tool names, descriptions, domains, and categories as you type
-- **Category filtering** - 16 categories with pill-style filter buttons for quick navigation
-- **Monospace design** - clean, light UI using JetBrains Mono throughout
-- **Responsive** - works on desktop and mobile
-- **Zero dependencies at runtime** - static SvelteKit site deployed on Vercel
+- **190+ curated tools** covering search engines, image analysis, geolocation, social media, domain intel, and more
+- **Instant search** filters across tool names, descriptions, domains, and categories as you type
+- **Category filtering** with 16 categories via pill buttons (desktop) or dropdown (mobile)
+- **Graph view** interactive horizontal tree visualisation inspired by OSINT Framework, with pan, zoom, and smooth animations
+- **Download & install** export the full bookmark collection as an HTML file and import into any browser
+- **Monospace design** clean, light UI using JetBrains Mono throughout
+- **Responsive** works on desktop and mobile
+- **Zero dependencies at runtime** static SvelteKit site deployed on Vercel
 
 ---
 
@@ -33,16 +37,17 @@
 
 ### About the App
 
-The page loads all 186+ bookmarks organised into 16 categories. Use the search bar or category pills to narrow down tools. Each tile links directly to the external tool in a new tab. Tools requiring an account are tagged accordingly.
+The page loads all bookmarks organised into 16 categories. Use the search bar or category pills to narrow down tools. Toggle to Graph View for an interactive tree. Each tile links directly to the external tool in a new tab. Tools requiring an account are tagged accordingly.
 
 ### Interface
 
 | Area | Description |
 |------|-------------|
-| **Header** | Title, attribution links, and "Make your own" link to Marksmith |
+| **Header** | Title, attribution links, view toggle, download, and "Make your own" link |
 | **Search bar** | Sticky search that filters across names, descriptions, domains, and categories |
-| **Category pills** | Filter buttons to show a single category at a time |
+| **Category pills** | Filter buttons (desktop) or dropdown (mobile) to show a single category |
 | **Tile grid** | Responsive grid of bookmark cards with favicon, name, and description |
+| **Graph view** | Interactive horizontal tree with expand/collapse, pan, zoom, and smooth animations |
 | **Back to top** | Appears after scrolling, smooth-scrolls to the top |
 
 ### Keyboard Shortcuts
@@ -52,81 +57,13 @@ The page loads all 186+ bookmarks organised into 16 categories. Use the search b
 | `/` | Focus the search bar |
 | `Escape` | Clear search and unfocus |
 
-### Categories
-
-| Category | Tools |
-|----------|-------|
-| Search & Discovery | 9 |
-| Image Analysis | 11 |
-| Geolocation & Mapping | 19 |
-| Email Intelligence | 11 |
-| Username Search | 5 |
-| Social Media Intelligence | 55 |
-| Domain & Network Intelligence | 18 |
-| People & Identity Search | 7 |
-| Phone Number Intelligence | 6 |
-| Web Archiving & Preservation | 3 |
-| Transportation & Tracking | 6 |
-| Australian Vehicle Registration | 8 |
-| Cryptocurrency & Currency | 4 |
-| Business & Corporate Intelligence | 5 |
-| Utilities & Tools | 11 |
-| OSINT Resources & Guides | 8 |
-
----
-
-## Development
-
-### Prerequisites
-
-- Node.js >= 18
-
-### Setup
-
-```bash
-git clone https://github.com/Project-Eyrie/toolkit.git
-cd toolkit
-npm install
-```
-
-### Dev Server
-
-```bash
-npm run dev
-```
-
-### Production Build
-
-```bash
-npm run build
-```
-
-### Deploy
-
-The project uses `@sveltejs/adapter-vercel`. Push to the connected Vercel project and it deploys automatically.
-
----
-
-## Project Structure
-
-```
-src/
-  lib/
-    data.ts           # Bookmark types, data array, and utility functions
-  routes/
-    +layout.svelte    # Favicon setup
-    +page.svelte      # Main page component
-  app.css             # Tailwind directives, font import, CSS variables
-```
-
 ---
 
 ## Notes
 
-- **Static site** - no backend, no database, all data is embedded in the build
-- **Favicons** - loaded from Google's favicon service; falls back to initials on failure
-- **Adding tools** - edit `src/lib/data.ts` and add entries to the appropriate category
-- **Build your own** - use [Marksmith](https://marksmith.notalex.sh) to create your own bookmark stack
+- **Single source of truth** all bookmarks live in `static/toolkit.html` as a standard Netscape bookmark file
+- **Favicons** loaded from Google's favicon service; falls back to initials on failure
+- **Build your own** use [Marksmith](https://marksmith.notalex.sh) to create your own bookmark stack
 
 ---
 

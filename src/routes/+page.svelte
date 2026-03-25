@@ -1,14 +1,21 @@
-<!-- Main page for the notalex.sh OSINT Utility Stack -->
+<!-- Main page for the notalex.sh OSINT Toolkit -->
 <script lang="ts">
 	import '../app.css';
-	import { bookmarks, getTotalLinks, getDomain, getFavicon, getInitials, type Link, type Category, type Subcategory } from '$lib/data';
+	import { fade } from 'svelte/transition';
+	import GraphView from '$lib/GraphView.svelte';
+	import { getTotalLinks, getDomain, getFavicon, getInitials, type Link, type Category, type Subcategory } from '$lib/data';
+
+	let { data } = $props();
+	const bookmarks = data.bookmarks;
 
 	let search = $state('');
 	let activeCategory = $state<string | null>(null);
 	let showScrollTop = $state(false);
 	let searchInput = $state<HTMLInputElement | null>(null);
+	let showInstall = $state(false);
+	let viewMode = $state<'grid' | 'graph'>('grid');
 
-	const totalLinks = getTotalLinks();
+	const totalLinks = getTotalLinks(bookmarks);
 
 	// Returns all links from a category including nested subcategory links
 	function getCategoryLinks(cat: Category): { link: Link; subcategory?: string }[] {
@@ -58,8 +65,12 @@
 			searchInput?.focus();
 		}
 		if (e.key === 'Escape') {
-			search = '';
-			searchInput?.blur();
+			if (showInstall) {
+				showInstall = false;
+			} else {
+				search = '';
+				searchInput?.blur();
+			}
 		}
 	}
 
@@ -77,29 +88,57 @@
 <svelte:window onkeydown={handleKeydown} onscroll={handleScroll} />
 
 <div class="mx-auto max-w-[1200px] px-6">
-	<header class="flex flex-wrap items-baseline justify-between gap-2 pt-12 pb-6">
-		<div>
-			<h1 class="text-2xl font-semibold tracking-tight text-[var(--text)]">notalex.sh OSINT Utility Stack</h1>
-			<p class="mt-1 text-xs text-[var(--text-tertiary)]">
-				by <a href="https://notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">notalex.sh</a>
-				&middot;
-				<a href="https://eyrie.notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">Project Eyrie</a>
-			</p>
-		</div>
-		<div class="flex flex-col items-end gap-1.5">
+	<header class="pt-12 pb-6">
+		<div class="flex flex-wrap items-baseline justify-between gap-2">
+			<div>
+				<h1 class="text-2xl font-semibold tracking-tight text-[var(--text)]">OSINT Toolkit</h1>
+				<p class="mt-1 text-xs text-[var(--text-tertiary)]">
+					by <a href="https://notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">notalex.sh</a>
+					&middot;
+					<a href="https://eyrie.notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">Project Eyrie</a>
+				</p>
+			</div>
 			<span class="text-sm text-[var(--text-tertiary)]">{totalLinks} bookmarks</span>
-			<a
-				href="https://marksmith.notalex.sh/"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-[0.7rem] font-medium text-[var(--text-secondary)] no-underline transition-all hover:border-[var(--accent)] hover:bg-[var(--accent-light)] hover:text-[var(--accent)]"
-			>
-				<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-				Make your own
-			</a>
+		</div>
+		<div class="mt-3 flex flex-wrap items-center gap-2">
+				<button
+					onclick={() => viewMode = viewMode === 'grid' ? 'graph' : 'grid'}
+					class="inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[0.7rem] font-medium no-underline transition-all {viewMode === 'graph' ? 'border-[var(--accent)] bg-[var(--accent-light)] text-[var(--accent)]' : 'border-[var(--border)] bg-[var(--surface)] text-[var(--text-secondary)] hover:border-[var(--accent)] hover:bg-[var(--accent-light)] hover:text-[var(--accent)]'}"
+				>
+					{#if viewMode === 'grid'}
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="3"/><line x1="12" y1="8" x2="12" y2="14"/><circle cx="5" cy="19" r="3"/><circle cx="19" cy="19" r="3"/><line x1="12" y1="14" x2="5" y2="16"/><line x1="12" y1="14" x2="19" y2="16"/></svg>
+						Graph View
+					{:else}
+						<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+						List View
+					{/if}
+				</button>
+				<button
+					onclick={() => showInstall = true}
+					class="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-[0.7rem] font-medium text-[var(--text-secondary)] no-underline transition-all hover:border-[var(--accent)] hover:bg-[var(--accent-light)] hover:text-[var(--accent)]"
+				>
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+					Download &amp; Install
+				</button>
+				<a
+					href="https://marksmith.notalex.sh/"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="inline-flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-[0.7rem] font-medium text-[var(--text-secondary)] no-underline transition-all hover:border-[var(--accent)] hover:bg-[var(--accent-light)] hover:text-[var(--accent)]"
+				>
+					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+					Make your own
+				</a>
 		</div>
 	</header>
 
+	{#key viewMode}
+	{#if viewMode === 'graph'}
+		<div in:fade={{ duration: 300, delay: 150 }} out:fade={{ duration: 150 }}>
+			<GraphView {bookmarks} />
+		</div>
+	{:else}
+	<div in:fade={{ duration: 300, delay: 150 }} out:fade={{ duration: 150 }}>
 	<div class="sticky top-0 z-50 border-b border-transparent bg-[var(--bg)] py-4" class:border-b-[var(--border)]={showScrollTop}>
 		<input
 			type="text"
@@ -118,17 +157,28 @@
 		</div>
 	</div>
 
-	<nav class="flex flex-wrap gap-1.5 py-4">
-		<button
-			class="rounded-full border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all {activeCategory === null ? 'border-[var(--accent)] bg-[var(--accent-light)] text-[var(--accent)]' : 'border-[var(--border)] bg-transparent text-[var(--text-secondary)] hover:border-[var(--border-hover)] hover:bg-[var(--surface)] hover:text-[var(--text)]'}"
-			onclick={() => selectCategory(null)}
-		>All</button>
-		{#each bookmarks as cat}
+	<nav class="py-4">
+		<select
+			class="w-full rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-2.5 text-sm text-[var(--text)] outline-none transition-all focus:border-[var(--accent)] focus:ring-3 focus:ring-[var(--accent-light)] sm:hidden"
+			onchange={(e) => selectCategory((e.target as HTMLSelectElement).value || null)}
+		>
+			<option value="" selected={activeCategory === null}>All Categories</option>
+			{#each bookmarks as cat}
+				<option value={cat.category} selected={activeCategory === cat.category}>{cat.category}</option>
+			{/each}
+		</select>
+		<div class="hidden flex-wrap gap-1.5 sm:flex">
 			<button
-				class="rounded-full border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all {activeCategory === cat.category ? 'border-[var(--accent)] bg-[var(--accent-light)] text-[var(--accent)]' : 'border-[var(--border)] bg-transparent text-[var(--text-secondary)] hover:border-[var(--border-hover)] hover:bg-[var(--surface)] hover:text-[var(--text)]'}"
-				onclick={() => selectCategory(cat.category)}
-			>{cat.category}</button>
-		{/each}
+				class="rounded-full border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all {activeCategory === null ? 'border-[var(--accent)] bg-[var(--accent-light)] text-[var(--accent)]' : 'border-[var(--border)] bg-transparent text-[var(--text-secondary)] hover:border-[var(--border-hover)] hover:bg-[var(--surface)] hover:text-[var(--text)]'}"
+				onclick={() => selectCategory(null)}
+			>All</button>
+			{#each bookmarks as cat}
+				<button
+					class="rounded-full border px-3 py-1.5 text-xs font-medium whitespace-nowrap transition-all {activeCategory === cat.category ? 'border-[var(--accent)] bg-[var(--accent-light)] text-[var(--accent)]' : 'border-[var(--border)] bg-transparent text-[var(--text-secondary)] hover:border-[var(--border-hover)] hover:bg-[var(--surface)] hover:text-[var(--text)]'}"
+					onclick={() => selectCategory(cat.category)}
+				>{cat.category}</button>
+			{/each}
+		</div>
 	</nav>
 
 	<main class="pb-16">
@@ -174,6 +224,9 @@
 			<p class="py-16 text-center text-sm text-[var(--text-tertiary)]">No bookmarks found</p>
 		{/if}
 	</main>
+	</div>
+	{/if}
+	{/key}
 </div>
 
 {#if showScrollTop}
@@ -181,6 +234,40 @@
 		onclick={scrollToTop}
 		class="fixed right-6 bottom-6 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-3 py-2 text-xs text-[var(--text-secondary)] shadow-md transition-all hover:border-[var(--accent)] hover:text-[var(--accent)]"
 	>&uarr; Back to top</button>
+{/if}
+
+{#if showInstall}
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div class="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm" onclick={() => showInstall = false} onkeydown={(e) => e.key === 'Escape' && (showInstall = false)}>
+		<!-- svelte-ignore a11y_no_static_element_interactions -->
+		<div class="mx-4 w-full max-w-lg rounded-2xl border border-[var(--border)] bg-[var(--surface)] p-8 shadow-xl" onclick={(e) => e.stopPropagation()} onkeydown={() => {}}>
+			<div class="mb-6 flex items-center justify-between">
+				<h2 class="text-lg font-semibold text-[var(--text)]">Download &amp; Install</h2>
+				<button onclick={() => showInstall = false} class="text-[var(--text-tertiary)] transition-colors hover:text-[var(--text)]">
+					<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+				</button>
+			</div>
+
+			<a
+				href="/toolkit.html"
+				download="toolkit.html"
+				class="mb-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-medium text-white no-underline transition-opacity hover:opacity-90"
+			>
+				<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+				Download toolkit.html
+			</a>
+
+			<div class="text-xs text-[var(--text-secondary)]">
+				<p class="mb-3">Import the downloaded file into your browser's bookmarks:</p>
+				<ol class="list-inside list-decimal space-y-1 pl-1">
+					<li>Open your browser's <span class="font-medium text-[var(--text)]">Bookmark Manager</span></li>
+					<li>Find the <span class="font-medium text-[var(--text)]">Import</span> option (usually under a menu or Import/Export)</li>
+					<li>Select <span class="font-medium text-[var(--text)]">Import Bookmarks from HTML File</span></li>
+					<li>Choose the downloaded <span class="font-medium text-[var(--text)]">toolkit.html</span> file</li>
+				</ol>
+			</div>
+		</div>
+	</div>
 {/if}
 
 {#snippet tile(link: Link)}
