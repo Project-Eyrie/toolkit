@@ -5,6 +5,7 @@
 
 <svelte:head>
 	<link rel="icon" href="/logo.png" />
+	<title>OSINT Toolkit</title>
 </svelte:head>
 
 {@render children()}
