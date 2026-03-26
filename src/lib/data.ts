@@ -34,11 +34,11 @@ export function parseNetscapeBookmarks(html: string): Category[] {
 			continue;
 		}
 		if (trimmed.startsWith('</DL>')) {
-			if (depth === 2 && currentCategory) {
+			if (depth === 3 && currentCategory) {
 				categories.push(currentCategory);
 				currentCategory = null;
 				currentSubcategory = null;
-			} else if (depth === 3) {
+			} else if (depth === 4) {
 				currentSubcategory = null;
 			}
 			depth--;
@@ -48,9 +48,9 @@ export function parseNetscapeBookmarks(html: string): Category[] {
 		const h3Match = trimmed.match(/<H3[^>]*>(.*?)<\/H3>/i);
 		if (h3Match) {
 			const name = decodeHTML(h3Match[1]);
-			if (depth === 1) {
+			if (depth === 2) {
 				currentCategory = { category: name };
-			} else if (depth === 2 && currentCategory) {
+			} else if (depth === 3 && currentCategory) {
 				if (!currentCategory.subcategories) currentCategory.subcategories = [];
 				currentSubcategory = { name, links: [] };
 				currentCategory.subcategories.push(currentSubcategory);
