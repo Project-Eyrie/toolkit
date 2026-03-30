@@ -7,6 +7,7 @@
 
 	let { data } = $props();
 	const bookmarks = data.bookmarks;
+	const lastModified = data.lastModified;
 
 	let search = $state('');
 	let activeCategory = $state<string | null>(null);
@@ -85,6 +86,10 @@
 	}
 </script>
 
+<svelte:head>
+	<title>OSINT Toolkit</title>
+</svelte:head>
+
 <svelte:window onkeydown={handleKeydown} onscroll={handleScroll} />
 
 <div class="mx-auto max-w-[1200px] px-6">
@@ -98,7 +103,12 @@
 					<a href="https://eyrie.notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">Project Eyrie</a>
 				</p>
 			</div>
-			<span class="text-sm text-[var(--text-tertiary)]">{totalLinks} bookmarks</span>
+			<div class="text-right text-sm text-[var(--text-tertiary)]">
+				<div>{totalLinks} bookmarks</div>
+				{#if lastModified}
+					<div class="text-[0.65rem]">Updated {lastModified}</div>
+				{/if}
+			</div>
 		</div>
 		<div class="mt-3 flex flex-wrap items-center gap-2">
 				<button

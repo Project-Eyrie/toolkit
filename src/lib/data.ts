@@ -107,6 +107,12 @@ function decodeHTML(str: string): string {
 		.replace(/&#39;/g, "'");
 }
 
+// Extracts the last-modified date from a meta tag in the HTML
+export function parseLastModified(html: string): string | null {
+	const match = html.match(/<META\s+NAME="last-modified"\s+CONTENT="([^"]+)"/i);
+	return match ? match[1] : null;
+}
+
 // Returns the total number of links across all categories
 export function getTotalLinks(bookmarks: Category[]): number {
 	let total = 0;
