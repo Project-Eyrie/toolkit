@@ -101,6 +101,8 @@
 					by <a href="https://notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">notalex.sh</a>
 					&middot;
 					<a href="https://eyrie.notalex.sh/" target="_blank" rel="noopener noreferrer" class="text-[var(--accent)] no-underline hover:underline">Project Eyrie</a>
+					&middot;
+					Australian focused
 				</p>
 			</div>
 			<div class="text-right text-sm text-[var(--text-tertiary)]">
