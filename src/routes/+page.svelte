@@ -20,13 +20,14 @@
 
 	// Returns all links from a category including nested subcategory links
 	function getCategoryLinks(cat: Category): { link: Link; subcategory?: string }[] {
-		if (cat.links) return cat.links.map((link) => ({ link }));
+		const result: { link: Link; subcategory?: string }[] = [];
+		if (cat.links) result.push(...cat.links.map((link) => ({ link })));
 		if (cat.subcategories) {
-			return cat.subcategories.flatMap((sub) =>
-				sub.links.map((link) => ({ link, subcategory: sub.name }))
-			);
+			for (const sub of cat.subcategories) {
+				result.push(...sub.links.map((link) => ({ link, subcategory: sub.name })));
+			}
 		}
-		return [];
+		return result;
 	}
 
 	// Checks if a link matches the current search query against name, desc, domain, and category
@@ -203,6 +204,15 @@
 						<span class="rounded-full bg-[var(--tag-bg)] px-2 py-0.5 text-[0.7rem] font-medium text-[var(--text-tertiary)]">{count}</span>
 					</div>
 
+					{#if cat.links}
+						<div class="mb-5 grid grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
+							{#each cat.links as link}
+								{#if matchesSearch(link, cat.category)}
+									{@render tile(link)}
+								{/if}
+							{/each}
+						</div>
+					{/if}
 					{#if cat.subcategories}
 						{#each cat.subcategories as sub}
 							{@const subCount = subVisibleCount(sub, cat.category)}
@@ -219,14 +229,6 @@
 								</div>
 							{/if}
 						{/each}
-					{:else if cat.links}
-						<div class="grid grid-cols-1 gap-2 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))]">
-							{#each cat.links as link}
-								{#if matchesSearch(link, cat.category)}
-									{@render tile(link)}
-								{/if}
-							{/each}
-						</div>
 					{/if}
 				</section>
 			{/if}
