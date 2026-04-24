@@ -138,21 +138,28 @@
 		const catChildren = bookmarks.map(cat => ({
 			id: cat.category, label: cat.category, level: 1, hasChildren: true,
 			childrenFn: () => {
-				if (cat.subcategories) {
-					return cat.subcategories.map(sub => ({
-						id: `${cat.category}/${sub.name}`, label: sub.name, level: 2, hasChildren: true,
-						childrenFn: () => sub.links.map(link => ({
-							id: `${cat.category}/${sub.name}/${link.name}`, label: link.name, level: 3,
+				type ChildNode = { id: string; label: string; level: number; url?: string; hasChildren: boolean; tag?: string; childrenFn?: () => any[] };
+				const children: ChildNode[] = [];
+				if (cat.links) {
+					for (const link of cat.links) {
+						children.push({
+							id: `${cat.category}/${link.name}`, label: link.name, level: 2,
 							url: link.url, hasChildren: false, tag: link.tag,
-						})),
-					}));
-				} else if (cat.links) {
-					return cat.links.map(link => ({
-						id: `${cat.category}/${link.name}`, label: link.name, level: 2,
-						url: link.url, hasChildren: false, tag: link.tag,
-					}));
+						});
+					}
 				}
-				return [];
+				if (cat.subcategories) {
+					for (const sub of cat.subcategories) {
+						children.push({
+							id: `${cat.category}/${sub.name}`, label: sub.name, level: 2, hasChildren: true,
+							childrenFn: () => sub.links.map(link => ({
+								id: `${cat.category}/${sub.name}/${link.name}`, label: link.name, level: 3,
+								url: link.url, hasChildren: false, tag: link.tag,
+							})),
+						});
+					}
+				}
+				return children;
 			},
 		}));
 
