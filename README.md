@@ -4,7 +4,7 @@
 
 # OSINT Toolkit
 
-> A curated, searchable collection of 190+ OSINT tools and resources, organised by category with instant filtering and an interactive graph view.
+> A curated, searchable collection of OSINT tools and resources, organised by category with instant filtering and an interactive graph view.
 
 [![Status](https://img.shields.io/badge/status-active-success.svg)]()
 [![In Project Eyrie](https://img.shields.io/badge/IN-PROJECT%20EYRIE-b45309?style=for-the-badge&labelColor=0f172a)](https://github.com/Project-Eyrie)
